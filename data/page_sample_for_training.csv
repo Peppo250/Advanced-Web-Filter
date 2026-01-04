@@ -1,0 +1,41 @@
+url,title,label
+/,Home - Anime Central,safe
+/anime/naruto,Naruto - Episode 1,safe
+/anime/one-piece,One Piece - Watch Online,safe
+/anime/shounen/adventure,Shounen Adventure - Episode List,safe
+/anime/romance/lighthearted,Light Romance - Episode Guide,safe
+/blog/anime-news,Latest Anime News and Reviews,safe
+/episode/123,Episode 123 - Full Recap,safe
+/search?q=naruto,Search results for Naruto,safe
+/collections/season-1,Season 1 Collection,safe
+/about,About - Anime Central,safe
+/anime/ecchi/collection,Ecchi Collection,bad
+/anime/adult/uncensored,Uncensored Adult Streams,bad
+/genre/18plus,18+ Restricted Content,bad
+/adult/series,title adult anime collection,bad
+/category/pornographic,Adult Scenes Archive,bad
+/tags/uncensored,Uncensored Videos,bad
+/special/adult-event,Private Adult Screening,bad
+/watch?show=ecchi_series,Watch Ecchi Series Now,bad
+/gallery/adult-thumbnails,Adult Thumbnails Gallery,bad
+/users/recommendations?age=18+,Recommended (18+),bad
+/recommendations/filter=ecchi,Ecchi Recommendations,bad
+/anime/mature/content, Mature Content Section,bad
+/anime/romance/intimate-scenes,Intimate Scenes (Spoilers),bad
+/listings/soft-erotica,Soft Erotica Collection,bad
+/anime/fanfic/romantic-encounters,Romantic Fanfic Highlights,safe
+/anime/special/behind-scenes,Behind the Scenes - Interviews,safe
+/news/industry/panel,Industry Panel Recap,safe
+/forum/thread/1234,Episode Discussion Thread,safe
+/anime/preview,Trailer & Preview Clips,safe
+/anime/character-profiles,Character Profiles & Bios,safe
+/culture/features/anime-fandom,Features on Anime Fandom,safe
+/blog/fiction/short-stories,Short Fiction (General),safe
+/anime/artist-interviews,Artist Interviews & Process,safe
+/shop/merch,Official Merchandise,safe
+/anime/ecchi-lite,Ecchi Lite — Mild Fan Service,bad
+/anime/uncut-collection,Uncut Collection - Viewer Discretion Advised,bad
+/videos/restricted,Restricted Videos (Verified 18+),bad
+/specials/romance-week,Romance Week Specials,safe
+/episodes/omnibus,Episode Omnibus (Compilation),safe
+/watch?series=family-friendly,Family Friendly Shows,safe

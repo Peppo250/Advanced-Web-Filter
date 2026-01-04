@@ -1,0 +1,27 @@
+{
+  "manifest_version": 3,
+  "name": "Anime Safe Filter",
+  "version": "2.0",
+  "description": "Three-level anime content filter with ML-based semantic blocking.",
+  "permissions": [
+    "storage",
+    "activeTab",
+    "scripting"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "run_at": "document_start"
+    }
+  ]
+}
