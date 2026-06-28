@@ -1,12 +1,13 @@
 {
   "manifest_version": 3,
-  "name": "Anime Safe Filter",
+  "name": "Advanced Web Filter",
   "version": "2.0",
-  "description": "Three-level anime content filter with ML-based semantic blocking.",
+  "description": "Three-level web content filter with ML-based semantic blocking.",
   "permissions": [
     "storage",
     "activeTab",
-    "scripting"
+    "scripting",
+    "declarativeNetRequest"
   ],
   "host_permissions": [
     "<all_urls>"
@@ -23,5 +24,14 @@
       "js": ["content.js"],
       "run_at": "document_start"
     }
-  ]
+  ],
+  "declarative_net_request": {
+    "rule_resources": [
+      {
+        "id": "ruleset_adblock",
+        "enabled": true,
+        "path": "rules.json"
+      }
+    ]
+  }
 }

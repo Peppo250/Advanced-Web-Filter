@@ -8,7 +8,7 @@ from sklearn.metrics import classification_report
 import joblib
 from pathlib import Path
 
-DATA_CSV = '../data/paragraph_sample_for_training.csv'  # expected columns: text,label
+DATA_CSV = Path(__file__).resolve().parent.parent / 'data' / 'paragraph_sample_for_training.csv'  # expected columns: text,label
 OUT_PATH = Path(__file__).resolve().parent / 'models' / 'paragraph_model.pkl'
 
 def load_data():

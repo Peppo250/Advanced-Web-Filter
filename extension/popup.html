@@ -1,21 +1,411 @@
 <!doctype html>
 <html>
 <head>
-<meta charset="utf-8">
-<title>Anime Safe Filter</title>
-<style>
-body{font-family:Arial, sans-serif; width:220px; padding:12px}
-button{padding:8px 10px; margin-top:8px}
-</style>
+  <meta charset="utf-8">
+  <title>Advanced Web Filter Options</title>
+  <style>
+    :root {
+      --bg-dark: #0a0a12;
+      --card-bg: rgba(255, 255, 255, 0.03);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --text-main: #f7fafc;
+      --text-muted: #a0aec0;
+      --accent-blue: #3b82f6;
+      --accent-red: #ef4444;
+      --accent-green: #10b981;
+      --accent-yellow: #f59e0b;
+      --font-stack: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    }
+
+    body {
+      font-family: var(--font-stack);
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      width: 350px;
+      margin: 0;
+      padding: 16px;
+      box-sizing: border-box;
+      overflow-x: hidden;
+    }
+
+    /* Header styling */
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--card-border);
+      padding-bottom: 12px;
+      margin-bottom: 12px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .brand-logo {
+      font-size: 22px;
+    }
+
+    .brand-title {
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      background: linear-gradient(120deg, #60a5fa, #3b82f6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* Master Switch */
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 44px;
+      height: 24px;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(255,255,255,0.1);
+      transition: .3s ease;
+      border-radius: 24px;
+      border: 1px solid var(--card-border);
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 16px;
+      width: 16px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: .3s ease;
+      border-radius: 50%;
+    }
+
+    input:checked + .slider {
+      background-color: var(--accent-blue);
+    }
+
+    input:checked + .slider:before {
+      transform: translateX(20px);
+    }
+
+    /* Tab navigation */
+    .tabs {
+      display: flex;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 3px;
+      margin-bottom: 12px;
+    }
+
+    .tab-btn {
+      flex: 1;
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      padding: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .tab-btn.active {
+      background: rgba(255,255,255,0.08);
+      color: var(--text-main);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+    }
+
+    /* Tab contents */
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    /* Server Status Info */
+    .status-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 12px;
+      margin-bottom: 12px;
+    }
+
+    .status-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      font-size: 13px;
+    }
+
+    .status-row:last-child {
+      margin-bottom: 0;
+    }
+
+    .status-label {
+      color: var(--text-muted);
+    }
+
+    .status-value {
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .dot-green { background-color: var(--accent-green); box-shadow: 0 0 8px var(--accent-green); }
+    .dot-red { background-color: var(--accent-red); box-shadow: 0 0 8px var(--accent-red); }
+
+    /* Input & Forms styling */
+    .form-group {
+      margin-bottom: 12px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+      font-weight: 500;
+    }
+
+    .input-row {
+      display: flex;
+      gap: 6px;
+    }
+
+    input[type="text"] {
+      flex: 1;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--card-border);
+      border-radius: 6px;
+      color: var(--text-main);
+      padding: 6px 10px;
+      font-size: 13px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    input[type="text"]:focus {
+      border-color: var(--accent-blue);
+    }
+
+    button.btn-primary {
+      background: var(--accent-blue);
+      border: none;
+      color: white;
+      border-radius: 6px;
+      padding: 6px 12px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    button.btn-primary:hover {
+      background: #2563eb;
+    }
+
+    button.btn-danger-outline {
+      background: none;
+      border: 1px solid rgba(239, 68, 68, 0.4);
+      color: var(--accent-red);
+      border-radius: 4px;
+      padding: 2px 6px;
+      font-size: 11px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    button.btn-danger-outline:hover {
+      background: rgba(239, 68, 68, 0.1);
+      border-color: var(--accent-red);
+    }
+
+    /* List Management */
+    .list-container {
+      background: rgba(0,0,0,0.2);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      max-height: 140px;
+      overflow-y: auto;
+      margin-top: 8px;
+    }
+
+    .list-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 6px 10px;
+      border-bottom: 1px solid rgba(255,255,255,0.03);
+      font-size: 12px;
+    }
+
+    .list-item:last-child {
+      border-bottom: none;
+    }
+
+    .list-item-text {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 220px;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 16px;
+      color: var(--text-muted);
+      font-size: 12px;
+      font-style: italic;
+    }
+
+    /* Level section badge list */
+    .level-badge {
+      display: inline-block;
+      font-size: 10px;
+      background: rgba(59, 130, 246, 0.15);
+      color: #93c5fd;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 6px;
+    }
+
+    .status-toast {
+      color: var(--accent-green);
+      font-size: 12px;
+      text-align: center;
+      margin-top: 8px;
+      height: 16px;
+    }
+  </style>
 </head>
 <body>
-<h3>Anime Safe Filter</h3>
-<label><input type="checkbox" id="enabled" checked> Enabled</label>
-<div style="margin-top:8px">Optional ML server: <br><input id="mlserver" placeholder="http://127.0.0.1:5000" style="width:100%"></div>
-<button id="save">Save</button>
-<div id="status" style="margin-top:8px;color:green"></div>
+  <!-- Header -->
+  <div class="header">
+    <div class="brand">
+      <span class="brand-logo">🛡️</span>
+      <span class="brand-title">Advanced Web Filter</span>
+    </div>
+    <label class="switch">
+      <input type="checkbox" id="enabled-toggle" checked>
+      <span class="slider"></span>
+    </label>
+  </div>
 
+  <!-- Navigation -->
+  <div class="tabs">
+    <button class="tab-btn active" data-tab="status-tab">Status</button>
+    <button class="tab-btn" data-tab="domain-tab">Websites</button>
+    <button class="tab-btn" data-tab="keyword-tab">Keywords</button>
+  </div>
 
-<script src="popup.js"></script>
+  <!-- Content 1: Status & General -->
+  <div id="status-tab" class="tab-content active">
+    <!-- Server health card -->
+    <div class="status-card">
+      <div class="level-badge">System Health</div>
+      <div class="status-row">
+        <span class="status-label">ML Server Connection</span>
+        <span class="status-value" id="server-status">
+          <span class="dot dot-red"></span> Offline
+        </span>
+      </div>
+      <div class="status-row">
+        <span class="status-label">URL model</span>
+        <span class="status-value" id="model-url-status">N/A</span>
+      </div>
+      <div class="status-row">
+        <span class="status-label">Paragraph model</span>
+        <span class="status-value" id="model-text-status">N/A</span>
+      </div>
+    </div>
+
+    <!-- ML configuration form -->
+    <div class="status-card" style="margin-bottom: 0;">
+      <div class="level-badge">Configuration</div>
+      <div class="form-group" style="margin-bottom: 8px;">
+        <label for="server-url">Backend Server URL</label>
+        <div class="input-row">
+          <input type="text" id="server-url" placeholder="http://127.0.0.1:5000">
+          <button id="save-url-btn" class="btn-primary">Save</button>
+        </div>
+      </div>
+      <div id="status-toast" class="status-toast"></div>
+    </div>
+  </div>
+
+  <!-- Content 2: Websites Whitelist/Blacklist (Level 1) -->
+  <div id="domain-tab" class="tab-content">
+    <div class="status-card">
+      <div class="level-badge">Level 1 - Website Filter</div>
+      
+      <div class="form-group">
+        <label>Allowed Sites (Whitelist)</label>
+        <div class="input-row">
+          <input type="text" id="whitelist-input" placeholder="e.g. crunchyroll.com">
+          <button id="add-whitelist-btn" class="btn-primary">Add</button>
+        </div>
+        <div class="list-container" id="whitelist-container"></div>
+      </div>
+
+      <div class="form-group" style="margin-bottom: 0;">
+        <label>Blocked Sites (Blacklist)</label>
+        <div class="input-row">
+          <input type="text" id="blacklist-input" placeholder="e.g. badsite.com">
+          <button id="add-blacklist-btn" class="btn-primary">Add</button>
+        </div>
+        <div class="list-container" id="blacklist-container"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Content 3: URL Path Keywords (Level 2) -->
+  <div id="keyword-tab" class="tab-content">
+    <div class="status-card" style="margin-bottom: 0;">
+      <div class="level-badge">Level 2 - Webpage Filter</div>
+      <div class="form-group" style="margin-bottom: 0;">
+        <label>Blocked URL Keywords</label>
+        <div class="input-row">
+          <input type="text" id="keyword-input" placeholder="e.g. adult, ecchi">
+          <button id="add-keyword-btn" class="btn-primary">Add</button>
+        </div>
+        <div class="list-container" id="keyword-container"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="popup.js"></script>
 </body>
 </html>

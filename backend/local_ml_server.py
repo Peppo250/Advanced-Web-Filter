@@ -5,8 +5,10 @@ from pathlib import Path
 import logging
 import traceback
 
-app = Flask('anime_filter_ml')
-LOG = logging.getLogger('anime_filter_ml')
+from urllib.parse import urlparse
+
+app = Flask('advanced_web_filter_ml')
+LOG = logging.getLogger('advanced_web_filter_ml')
 logging.basicConfig(level=logging.INFO)
 
 MODELS_DIR = Path(__file__).resolve().parent.parent / 'ml' / 'models'
@@ -23,14 +25,12 @@ def safe_load(path):
         LOG.warning(f"Model load failed: {path} -> {e}")
         return None
 
-domain_model = safe_load(MODELS_DIR / 'domain_model.pkl')
 page_model = safe_load(MODELS_DIR / 'page_model.pkl')
 paragraph_model = safe_load(MODELS_DIR / 'paragraph_model.pkl')  # expects predict_proba
 
 @app.route('/health', methods=['GET'])
 def health():
     return jsonify({'ok': True, 'models': {
-        'domain_model': bool(domain_model),
         'page_model': bool(page_model),
         'paragraph_model': bool(paragraph_model)
     }})
@@ -39,16 +39,25 @@ def health():
 def classify_page():
     try:
         data = request.get_json() or {}
-        url = data.get('url','').lower()
-        # very simple: use page_model if available; otherwise unknown
+        url = data.get('url', '')
+        title = data.get('title', '')
+        
+        # Clean url to match relative paths used in training
+        try:
+            parsed = urlparse(url)
+            path = parsed.path
+            if parsed.query:
+                path += '?' + parsed.query
+        except Exception:
+            path = url
+            
+        combined_text = f"{path} {title}".strip().lower()
+        
         if page_model:
-            # page_model expects the URL title or path as text input
-            X = [url]
+            X = [combined_text]
             if hasattr(page_model, "predict_proba"):
                 probs = page_model.predict_proba(X)[0]
-                # assume classes ['good','bad'] or similar; try to map
                 classes = page_model.classes_.tolist()
-                # find probability of 'bad' or 'sexual' class
                 prob_bad = 0.0
                 for cls, p in zip(classes, probs):
                     if str(cls).lower() in ('bad','sexual','adult','porn','suspicious'):
@@ -56,7 +65,7 @@ def classify_page():
                 decision = 'block' if prob_bad >= PAGE_INTENT_BLOCK_PROB else 'allow'
                 return jsonify({'decision': decision, 'prob': prob_bad, 'label': 'sexual' if prob_bad>=PAGE_INTENT_BLOCK_PROB else 'allow'})
             else:
-                pred = page_model.predict([url])[0]
+                pred = page_model.predict(X)[0]
                 decision = 'block' if str(pred).lower() in ('bad','sexual','adult') else 'allow'
                 return jsonify({'decision': decision, 'prob': None, 'label': pred})
         else:
